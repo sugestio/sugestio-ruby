@@ -8,9 +8,32 @@ A basic Ruby library for interfacing with the Sugestio (http://sugestio.com) rec
 
 = Usage
 
-  require 'sugestio'
-  client = Sugestio.new('username', 'password')
+== Getting personal recommendations
+
+  require 'sugestio'  
+  client = Sugestio.new('account', 'secret')
+
   result = client.get_recommendations(user_id)
+
+  result.each { |recommendation|
+    print "Item #{recommendation['itemid']}, score #{recommendation['score']}\n"
+  }
+
+== Submitting consumption data
+
+  require 'sugestio'
+  client = Sugestio.new('account', 'secret')
+
+  consumption = {:userid=>'A', :itemid=>'X', :type=>'VIEW'}
+  client.add_consumption(consumption)
+
+== Submitting item metadata
+
+  require 'sugestio'
+  client = Sugestio.new('account', 'secret')
+
+  item = {:id=>123, :title=>"Product 123", :"category[]"=>['A', 'B']}
+  client.add_item(item)
 
 == Note on Patches/Pull Requests
  
