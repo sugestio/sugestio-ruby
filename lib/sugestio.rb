@@ -59,7 +59,23 @@ class Sugestio
   def add_consumption(consumption)
     return api_request("/sites/#{@username}/consumptions.json", :post, consumption)
   end
-  
+
+  def get_consumption(consumption_id)
+    return api_request("/sites/#{@username}/consumptions/#{consumption_id}.json", :get)
+  end
+
+  def delete_consumption(consumption_id)
+    return api_request("/sites/#{@username}/consumptions/#{consumption_id}.json", :delete)
+  end
+
+  def get_all_consumptions()
+    return api_request("/sites/#{@username}/consumptions.json", :get)
+  end
+
+  def get_user_consumptions(user_id)
+    return api_request("/sites/#{@username}/users/#{user_id}/consumptions.json", :get)
+  end
+
   def get_recommendations(user_id, options = {})
     return api_request("/sites/#{@username}/users/#{user_id}/recommendations.json", :get, options)
   end
