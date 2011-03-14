@@ -9,6 +9,7 @@ class Sugestio
   class ServerError < SugestioError; end
   class BadRequest < SugestioError; end
   class DecodeError < SugestioError; end
+  class EncodeError < SugestioError; end
   class UnknownError < SugestioError; end
 
   VERSION = '0.1'
@@ -106,8 +107,12 @@ class Sugestio
       url = "#{url}?#{build_query_string(data)}"
       response = @access_token.request(method, url, headers)
     when :post, :put
-      payload = JSON.generate(data)      
-      response = @access_token.request(method, url, payload, headers)
+      begin
+        payload = JSON.generate(data)      
+        response = @access_token.request(method, url, payload, headers)
+      rescue JSON::GeneratorError
+        raise EncodeError, "Could not generate JSON from content: <#{data}>"
+      end
     end
 
     handle_errors(response)
