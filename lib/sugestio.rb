@@ -95,7 +95,7 @@ class Sugestio
   protected
   
   def api_request(path, method, data = {})
-    headers = {'User-Agent' => USER_AGENT}
+    headers = {'User-Agent' => USER_AGENT, 'Content-Type' => 'application/json'}
     response = nil
     parsed_response = nil
     
@@ -106,7 +106,8 @@ class Sugestio
       url = "#{url}?#{build_query_string(data)}"
       response = @access_token.request(method, url, headers)
     when :post, :put
-      response = @access_token.request(method, url, data, headers)
+      payload = JSON.generate(data)      
+      response = @access_token.request(method, url, payload, headers)
     end
 
     handle_errors(response)
