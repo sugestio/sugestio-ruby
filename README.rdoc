@@ -1,17 +1,62 @@
-= sugestio-ruby
+= Overview
 
-A basic Ruby library for interfacing with the Sugestio (http://sugestio.com) recommendation service.
+This is a Ruby library for interfacing with the Sugestio[http://www.sugestio.com] recommendation service. Data is submitted as JSON.
 
-= Pre-requisites
+== About Sugestio
+
+Sugestio is a scalable and fault tolerant service that now brings the power of 
+web personalisation to all developers. The RESTful web service provides an easy to use 
+interface and a set of developer libraries that enable you to enrich 
+your content portals, e-commerce sites and other content based websites.
+
+=== Access credentials and the Sandbox
+
+To access the Sugestio service, you need an account name and a secret key. 
+To run the examples from the tutorial, you can use the following credentials:
+
+* account name: sandbox
+* secret key: demo
+
+The Sandbox is a *read-only* account. You can use these credentials to experiment 
+with the service. The Sandbox can give personal recommendations for users 1 through 5, 
+and similar items for items 1 through 5.
+
+When you are ready to work with real data, you may apply for a developer account through 
+the {Sugestio website}[http://www.sugestio.com]. 
+
+== About this library
+
+=== Features
+
+The following API[http://www.sugestio.com/documentation] features are implemented:
+
+* get personalized recommendations for a given user
+* get items that are similar to a given item
+* get users that are similar to a given user
+* (bulk) submit user activity (consumptions): clicks, purchases, ratings, ...
+* (bulk) submit item metadata: description, location, tags, categories, ...  	
+* (bulk) submit user metadata: gender, location, birthday, ...
+* delete consumptions
+* delete item metadata
+* delete user metadata
+* get performance data (analytics): precision, recall, ...
+
+=== Requirements
 
 * oauth gem (http://github.com/pelle/oauth)
+
+=== Credits
+
+Written by Martin May (http://github.com/HiroProt). Portions inspired by (http://github.com/archfear/simplegeo-ruby).
+
+Copyright (c) 2010 Martin May. See LICENSE for details.
 
 = Usage
 
 == Getting personal recommendations
 
   require 'sugestio'  
-  client = Sugestio.new('account', 'secret')
+  client = Sugestio.new('sandbox', 'demo')
 
   result = client.get_recommendations(user_id)
 
@@ -22,7 +67,7 @@ A basic Ruby library for interfacing with the Sugestio (http://sugestio.com) rec
 == Submitting consumption data
 
   require 'sugestio'
-  client = Sugestio.new('account', 'secret')
+  client = Sugestio.new('sandbox', 'demo')
 
   consumption = {:userid=>'A', :itemid=>'X', :type=>'VIEW'}
   client.add_consumption(consumption)
@@ -30,23 +75,16 @@ A basic Ruby library for interfacing with the Sugestio (http://sugestio.com) rec
 == Submitting item metadata
 
   require 'sugestio'
-  client = Sugestio.new('account', 'secret')
+  client = Sugestio.new('sandbox', 'demo')
 
   item = {:id=>123, :title=>"Product 123", :"category"=>['A', 'B']}
   client.add_item(item)
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+== Bulk submissions
 
-== Credits
+  require 'sugestio'
+  client = Sugestio.new('sandbox', 'demo')
 
-Written by Martin May (http://github.com/HiroProt). Portions inspired by (http://github.com/archfear/simplegeo-ruby).
-
-Copyright (c) 2010 Martin May. See LICENSE for details.
+  item1 = {:id=>1, :title=>"Product 1", :"category"=>['A', 'B']}
+  item2 = {:id=>2, :title=>"Product 2", :"category"=>['C', 'D']}
+  client.add_item([item1, item2])
